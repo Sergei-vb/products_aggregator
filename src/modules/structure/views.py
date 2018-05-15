@@ -1,5 +1,8 @@
-from django.http import HttpResponse
+#!/usr/bin/env python3
+from django.shortcuts import render
+
+from .models import Genre
 
 
-def index(request):
-    return HttpResponse("It will main page.")
+def show_genres(request):
+    return render(request, "genres.html", {'genres': Genre.objects.all()})
