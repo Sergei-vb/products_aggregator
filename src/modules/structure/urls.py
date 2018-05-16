@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 from django.urls import path
 
-from . import views
+from .views import Main
 
 urlpatterns = [
-    path('', views.show_genres, name='index'),
+    path('', Main.as_view(), name='main'),
 ]

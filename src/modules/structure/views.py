@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
-from django.shortcuts import render
+from django.views.generic import TemplateView
 
-from .models import Genre
+from .models import Category
 
 
-def show_genres(request):
-    return render(request, "genres.html", {'genres': Genre.objects.all()})
+class Main(TemplateView):
+    template_name = "main.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(Main, self).get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
+

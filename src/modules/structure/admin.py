@@ -2,12 +2,12 @@ from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
 # from mptt.admin import MPTTModelAdmin
 
-from .models import Genre
+from .models import Category, Product, Brand, Color
 
 # admin.site.register(Genre, MPTTModelAdmin)
 
 admin.site.register(
-    Genre,
+    Category,
     DraggableMPTTAdmin,
     list_display=(
         'tree_actions',
@@ -18,3 +18,9 @@ admin.site.register(
         'indented_title',
     ),
 )
+
+admin.site.register(Product)
+
+admin.site.register(Brand)
+
+admin.site.register(Color)
