@@ -1,13 +1,13 @@
 {% load mptt_tags %}
 <ul>
     {% recursetree categories %}
-        <li style="list-style-type: none;">
-            {% if children %}
-                {{ node.name }}
+            <li style="list-style-type: none;">
+                <a href="{% url 'products_list' pk=node.id %}">
+                    {{ node.name }}
+                </a>
                 {% if not node.is_leaf_node %}
-                    <a href="#">{{ children }}</a>
+                    {{ children }}
                 {% endif %}
-            {% endif %}
-        </li>
+            </li>
     {% endrecursetree %}
 </ul>

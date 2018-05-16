@@ -10,6 +10,10 @@ class Category(MPTTModel):
     class MPTTMeta:
         order_insertion_by = ['name']
 
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+
     def __str__(self):
         return self.name
 
@@ -17,12 +21,20 @@ class Category(MPTTModel):
 class Brand(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
+    class Meta:
+        verbose_name = "Brand"
+        verbose_name_plural = "Brands"
+
     def __str__(self):
         return self.name
 
 
 class Color(models.Model):
     name = models.CharField(max_length=50, unique=True)
+
+    class Meta:
+        verbose_name = "Color"
+        verbose_name_plural = "Colors"
 
     def __str__(self):
         return self.name
@@ -36,8 +48,12 @@ class Product(models.Model):
                               on_delete=models.CASCADE)
     category = models.ForeignKey(Category, related_name='category_products',
                                  on_delete=models.CASCADE)
+    subcategory = models.CharField(max_length=100)
     gender = models.CharField(max_length=10)
+
+    class Meta:
+        verbose_name = "Product"
+        verbose_name_plural = "Products"
 
     def __str__(self):
         return self.name
-

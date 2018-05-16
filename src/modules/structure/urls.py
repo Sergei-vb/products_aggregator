@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-from django.urls import path
+from django.conf.urls import url
 
-from .views import Main
+from .views import Main, ListProducts
 
 urlpatterns = [
-    path('', Main.as_view(), name='main'),
+    url(r'^$', Main.as_view(), name='main'),
+    url(r'^categories/(?P<pk>\d+)/$',
+        ListProducts.as_view(), name='products_list')
 ]

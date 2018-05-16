@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
-from .models import Category
+from .models import Category, Product
 
 
 class Main(TemplateView):
@@ -13,3 +13,9 @@ class Main(TemplateView):
         return context
 
 
+class ListProducts(ListView):
+    template_name = "list_products.html"
+
+    def get_queryset(self):
+        queryset = Product.objects.filter(category=self.kwargs['pk'])
+        return queryset
