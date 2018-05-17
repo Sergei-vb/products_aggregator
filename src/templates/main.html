@@ -14,11 +14,11 @@
                 {% if node.level == 2 and not node.get_next_sibling %}
                     <a href="{% url 'products_list_all' key=node.parent.id %}">
                         All {{ node.parent }}
-                    </a><br/><br/>
+                    </a>
                 {% endif %}
 
                 {% if not node.is_leaf_node %}
-                    {{ children }}
+                    <ul>{{ children }}</ul>
                 {% endif %}
 
             </li>
