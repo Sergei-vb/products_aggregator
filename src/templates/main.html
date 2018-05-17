@@ -12,7 +12,7 @@
                 {% endif %}
 
                 {% if node.level == 2 and not node.get_next_sibling %}
-                    <a href="{% url 'products_list_all' key=node.parent.id %}">
+                    <a href="{% url 'products_list_all' pk=node.parent.id %}">
                         All {{ node.parent }}
                     </a>
                 {% endif %}

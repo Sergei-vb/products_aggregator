@@ -25,19 +25,7 @@ class DetailProduct(DetailView):
     template_name = "detail_product.html"
     model = Product
 
-    def get_context_data(self, **kwargs):
-        context = super(DetailProduct, self).get_context_data(**kwargs)
-        context['product'] = Product.objects.get(id=self.kwargs['pk'])
-        return context
 
-
-class ListProductsAll(ListView):
+class ListProductsAll(DetailView):
     template_name = "list_products_all.html"
-    model = Product
-
-    def get_context_data(self, **kwargs):
-        context = super(ListProductsAll, self).get_context_data(**kwargs)
-        context['parent_category'] = Category.objects.filter(
-            id=self.kwargs['key']
-        )
-        return context
+    model = Category

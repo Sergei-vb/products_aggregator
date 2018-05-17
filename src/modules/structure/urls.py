@@ -9,6 +9,6 @@ urlpatterns = [
         ListProducts.as_view(), name='products_list'),
     url(r'^detail/(?P<pk>\d+)/$',
         DetailProduct.as_view(), name='product_detail'),
-    url(r'^categories/all/(?P<key>\d+)/$',
+    url(r'^categories/all/(?P<pk>\d+)/$',
         ListProductsAll.as_view(), name='products_list_all'),
 ]
