@@ -1,0 +1,10 @@
+{% for sub in parent_category %}
+    {% for category in sub.get_children %}
+        {% for prod in category.category_products.all %}
+            <a href="{% url 'product_detail' pk=prod.id %}">
+                {{ prod }}
+            </a>
+        {% endfor %}
+        <br/><br/>
+    {% endfor %}
+{% endfor %}

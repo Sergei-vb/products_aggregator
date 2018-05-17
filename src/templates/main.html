@@ -2,12 +2,25 @@
 <ul>
     {% recursetree categories %}
             <li style="list-style-type: none;">
-                <a href="{% url 'products_list' pk=node.id %}">
+
+                {% if node.level == 0 or node.level == 1 %}
                     {{ node.name }}
-                </a>
+                {% else %}
+                    <a href="{% url 'products_list' pk=node.id %}">
+                        {{ node.name }}
+                    </a><br/>
+                {% endif %}
+
+                {% if node.level == 2 and not node.get_next_sibling %}
+                    <a href="{% url 'products_list_all' key=node.parent.id %}">
+                        All {{ node.parent }}
+                    </a><br/><br/>
+                {% endif %}
+
                 {% if not node.is_leaf_node %}
                     {{ children }}
                 {% endif %}
+
             </li>
     {% endrecursetree %}
 </ul>
