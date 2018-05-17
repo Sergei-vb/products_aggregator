@@ -3,7 +3,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 
 class Category(MPTTModel):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True,
                             blank=True, related_name='children')
 
@@ -41,7 +41,7 @@ class Color(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     color = models.ForeignKey(Color, related_name='color_products',
                               on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, related_name='brand_products',

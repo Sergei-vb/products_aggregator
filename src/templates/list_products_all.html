@@ -3,7 +3,6 @@
         {% for prod in category.category_products.all %}
             <a href="{% url 'product_detail' pk=prod.id %}">
                 {{ prod }}
-            </a>
+            </a><br/>
         {% endfor %}
-        <br/>
     {% endfor %}
