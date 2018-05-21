@@ -3,7 +3,7 @@ import csv
 
 
 def handle_files(datafile_instance):
-    from modules.structure.models import Product, Category, Color, Brand,\
+    from modules.structure.models import Product, Category, Color, Brand, \
         DataFile
 
     reader = csv.DictReader(open(datafile_instance.data.path))
@@ -17,45 +17,54 @@ def handle_files(datafile_instance):
     valid_column_names = necessary_fields.issubset(fieldnames_set)
 
     if not valid_column_names:
-        print("error")
+        datafile_instance.logs += 'Error. Wrong column names.\n'
         datafile_instance.status = DataFile.ERROR
-        datafile_instance.save(update_fields=['status'])
+        datafile_instance.save(update_fields=['status', 'logs'])
 
     else:
+        counter = 0
         for row in reader:
             product_data = {key: '' for key in necessary_fields}
 
             product_data['Short Description'] = row['Short Description']
             product_data['Gender'] = row['Gender']
+            product_data['Color'] = row['Color']
+            product_data['Brand'] = row['Brand']
             product_data['SubSubcategory'] = row['SubSubcategory']
-
-            product_data['Color'], _ = Color.objects.get_or_create(
-                name=row['Color'])
-
-            product_data['Brand'], _ = Brand.objects.get_or_create(
-                name=row['Brand'])
-
-            gender_category, _ = Category.objects.get_or_create(
-                name=product_data['Gender'], parent=None)
-
-            main_category, _ = Category.objects.get_or_create(
-                name=row['Main Category'], parent=gender_category
-            )
-
-            product_data['Subcategory'], _ = Category.objects.get_or_create(
-                name=row['Subcategory'], parent=main_category
-            )
+            product_data['Main Category'] = row['Main Category']
+            product_data['Subcategory'] = row['Subcategory']
 
             signal = False
 
             for val in list(product_data.values()):
-                if val is None:
+                if val == '':
                     signal = True
                     break
 
             if signal:
-                print('error')
+                counter += 1
+                datafile_instance.logs += ('Error. Product didn\'t save. '
+                                           'Empty value in the field.\n')
+                datafile_instance.save(update_fields=['logs'])
                 continue
+
+            product_data['Color'], _ = Color.objects.get_or_create(
+                name=product_data['Color'])
+
+            product_data['Brand'], _ = Brand.objects.get_or_create(
+                name=product_data['Brand'])
+
+            gender_category, _ = Category.objects.get_or_create(
+                name=product_data['Gender'], parent=None)
+
+            product_data['Main Category'], _ = Category.objects.get_or_create(
+                name=product_data['Main Category'], parent=gender_category
+            )
+
+            product_data['Subcategory'], _ = Category.objects.get_or_create(
+                name=product_data['Subcategory'],
+                parent=product_data['Main Category']
+            )
 
             my_object = Product(name=product_data['Short Description'],
                                 color=product_data['Color'],
@@ -65,5 +74,9 @@ def handle_files(datafile_instance):
                                 gender=product_data['Gender'])
             my_object.save()
 
-        datafile_instance.status = DataFile.SUCCESS
+        if not counter:
+            datafile_instance.status = DataFile.SUCCESS
+        else:
+            datafile_instance.status = DataFile.ALMOST
+
         datafile_instance.save(update_fields=['status'])

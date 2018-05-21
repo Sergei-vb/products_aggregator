@@ -67,15 +67,18 @@ class DataFile(models.Model):
     BEGIN = "B"
     SUCCESS = "S"
     ERROR = "E"
+    ALMOST = "A"
 
     STATUS_CHOICES = (
         (NONE, 'None'),
         (BEGIN, 'Begin'),
         (SUCCESS, 'Success'),
         (ERROR, 'Error'),
+        (ALMOST, 'Almost')
     )
 
     data = models.FileField()
+    logs = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES,
                               default=NONE)
 
