@@ -62,14 +62,22 @@ class Product(models.Model):
 
 
 class DataFile(models.Model):
-    data = models.FileField()
-    all_status = (
-        ('N', 'None'),
-        ('B', 'Begin'),
-        ('S', 'Success'),
-        ('E', 'Error'),
+
+    NONE = "N"
+    BEGIN = "B"
+    SUCCESS = "S"
+    ERROR = "E"
+
+    STATUS_CHOICES = (
+        (NONE, 'None'),
+        (BEGIN, 'Begin'),
+        (SUCCESS, 'Success'),
+        (ERROR, 'Error'),
     )
-    status = models.CharField(max_length=1, choices=all_status, default='N')
+
+    data = models.FileField()
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES,
+                              default=NONE)
 
     def save(self, *args, **kwargs):
         just_add = self.id is not None
