@@ -2,7 +2,7 @@ from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
 # from mptt.admin import MPTTModelAdmin
 
-from .models import Category, Product, Brand, Color
+from .models import Category, Product, Brand, Color, DataFile
 
 # admin.site.register(Genre, MPTTModelAdmin)
 
@@ -24,3 +24,5 @@ admin.site.register(Product)
 admin.site.register(Brand)
 
 admin.site.register(Color)
+
+admin.site.register(DataFile)

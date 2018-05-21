@@ -1,6 +1,8 @@
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 
+from core.parser import handle_files
+
 
 class Category(MPTTModel):
     name = models.CharField(max_length=50, unique=True)
@@ -57,3 +59,21 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class DataFile(models.Model):
+    data = models.FileField()
+    all_status = (
+        ('N', 'None'),
+        ('B', 'Begin'),
+        ('S', 'Success'),
+        ('E', 'Error'),
+    )
+    status = models.CharField(max_length=1, choices=all_status, default='N')
+
+    def save(self, *args, **kwargs):
+        just_add = self.id is not None
+        super(DataFile, self).save(*args, **kwargs)
+
+        if not just_add:
+            handle_files(self)
