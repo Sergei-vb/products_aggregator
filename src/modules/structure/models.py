@@ -1,7 +1,7 @@
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 
-from core.parser import handle_files
+from .tasks import handle_files
 
 
 class Category(MPTTModel):
@@ -87,4 +87,4 @@ class DataFile(models.Model):
         super(DataFile, self).save(*args, **kwargs)
 
         if not just_add:
-            handle_files(self)
+            handle_files.delay(self.id)

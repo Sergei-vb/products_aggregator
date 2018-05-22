@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 import csv
 
+from core.celery import app
 
-def handle_files(datafile_instance):
-    from modules.structure.models import Product, Category, Color, Brand, \
-        DataFile
+
+@app.task
+def handle_files(datafile_id):
+    from .models import Product, Category, Color, Brand, DataFile
+
+    datafile_instance = DataFile.objects.get(id=datafile_id)
 
     reader = csv.DictReader(open(datafile_instance.data.path))
     datafile_instance.status = DataFile.BEGIN
@@ -34,14 +38,7 @@ def handle_files(datafile_instance):
             product_data['Main Category'] = row['Main Category']
             product_data['Subcategory'] = row['Subcategory']
 
-            signal = False
-
-            for val in list(product_data.values()):
-                if val == '':
-                    signal = True
-                    break
-
-            if signal:
+            if not all(product_data.values()):
                 counter += 1
                 datafile_instance.logs += ('Error. Product didn\'t save. '
                                            'Empty value in the field.\n')
